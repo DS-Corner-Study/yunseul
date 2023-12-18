@@ -26,9 +26,8 @@ const mockTodo = [
 ];
 
 function App() {
-  const [todo, setTodo] = useState(mockTodo);
-
   const idRef = useRef(3);
+  const [todo, setTodo] = useState(mockTodo);
 
   const onCreate = (content) => {
     const newItem = {
@@ -40,13 +39,24 @@ function App() {
     setTodo([newItem, ...todo]);
     idRef.current += 1; 
   };
+  
+  const onUpdate = (targetId) => {
+    setTodo(
+      todo.map((it) =>
+        it.id === targetId ? { ...it, isDone: !it.isDone } : it
+      )
+    );
+};
+const onDelete = (targetId) => { 
+  setTodo(todo.filter((it) => it.id !== targetId));
+};
 
-  return (
-    <div className="App">
-      <Header />
-      <TodoEditor onCreate={onCreate} />
-      <TodoList />
-    </div>
-  );
+return (
+  <div className="App">
+    <Header />
+    <TodoEditor onCreate={onCreate} />
+    <TodoList todo={todo} onUpdate={onUpdate} onDelete={onDelete} /> 
+  </div>
+);
 }
 export default App;
