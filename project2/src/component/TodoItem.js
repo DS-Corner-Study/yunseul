@@ -1,10 +1,11 @@
 import "./TodoItem.css";
+import React from "react";
 
-const TodoItem = ({ id, content, isDone, createdDate, onUpdate, onDelete }) => { 
+const TodoItem = ({ id, content, isDone, createdDate, onUpdate, onDelete }) => {
   const onChangeCheckbox = () => {
     onUpdate(id);
   };
-  const onClickDelete = () => { 
+  const onClickDelete = () => {
     onDelete(id);
   };
 
@@ -18,7 +19,7 @@ const TodoItem = ({ id, content, isDone, createdDate, onUpdate, onDelete }) => {
         {new Date(createdDate).toLocaleDateString()}
       </div>
       <div className="btn_col">
-        <button onClick={onClickDelete}>삭제</button> 
+        <button onClick={onClickDelete}>삭제</button>
       </div>
     </div>
   );
