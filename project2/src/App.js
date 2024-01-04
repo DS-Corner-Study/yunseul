@@ -5,6 +5,8 @@ import TodoEditor from "./component/TodoEditor";
 import TodoList from "./component/TodoList";
 import TestComp from "./component/TestComp";
 
+export const TodoContext = React.createContext();
+
 const mockTodo = [
   {
     id: 0,
@@ -78,12 +80,14 @@ function App() {
 
   return (
     <div className="App">
-      <TestComp />
       <Header />
-      <TodoEditor onCreate={onCreate} />
-      <TodoList todo={todo} onUpdate={onUpdate} onDelete={onDelete} />
+      <TodoContext.Provider value={{ todo, onCreate, onUpdate, onDelete }}>
+        {" "}
+        // Props(value)를 객체로 설정
+        <TodoEditor /> // 기존의 Props 제거
+        <TodoList /> // 기존의 Props 제거
+      </TodoContext.Provider>
     </div>
   );
 }
-
 export default App;

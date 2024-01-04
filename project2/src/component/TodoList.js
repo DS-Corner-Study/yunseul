@@ -1,14 +1,18 @@
 import TodoItem from "./TodoItem";
 import "./TodoList.css";
-import { useState } from "react";
+import { useContext, useState, useMemo } from "react"; // useContext 불러오기
+import { TodoContext } from "../App"; // TodoContext 불러오기
 
-const TodoList = ({ todo, onUpdate, onDelete }) => { 
-  const [search, setSearch] = useState(""); 
-  const onChangeSearch = (e) => { // ②
+const TodoList = () => {
+  const { todo } = useContext(TodoContext); // todo 외의 나머지 삭제   const storeData = useContext(TodoContext); // useContext를 호출하고 TodoContext를 인수로 전달해 storeData에 저장하기
+  console.log(storeData); // storeData를 콘솔에 출력
+  const [search, setSearch] = useState("");
+  const onChangeSearch = (e) => {
+    // ②
     setSearch(e.target.value);
   };
-
-  const analyzeTodo = () => {
+  const analyzeTodo = useMemo(() => {
+    console.log("analyzeTodo 함수 호출");
     const totalCount = todo.length;
     const doneCount = todo.filter((it) => it.isDone).length;
     const notDoneCount = totalCount - doneCount;
@@ -17,14 +21,14 @@ const TodoList = ({ todo, onUpdate, onDelete }) => {
       doneCount,
       notDoneCount,
     };
-  };
-  const { totalCount, doneCount, notDoneCount } = analyzeTodo();
+  }, [todo]);
+  const { totalCount, doneCount, notDoneCount } = analyzeTodo;
 
   const getSearchResult = () => {
     return search === ""
       ? todo
       : todo.filter((it) =>
-          it.content.toLowerCase().includes(search.toLowerCase()) 
+          it.content.toLowerCase().includes(search.toLowerCase())
         );
   };
   return (
@@ -41,17 +45,16 @@ const TodoList = ({ todo, onUpdate, onDelete }) => {
         className="searchbar"
         placeholder="검색어를 입력하세요"
       />
-          <div className="list_wrapper">
+      <div className="list_wrapper">
         {getSearchResult().map((it) => (
-          <TodoItem
-            key={it.id}
-            {...it}
-            onUpdate={onUpdate}
-            onDelete={onDelete} 
-          />
+          <TodoItem key={it.id} {...it} /> // 기존에 Props으로 전달하던 코드도 삭제
         ))}
       </div>
     </div>
   );
+};
+
+TodoList.defaultProps = {
+  todo: [],
 };
 export default TodoList;

@@ -1,11 +1,14 @@
-import { useState, useRef } from "react";
+import { useContext, useState, useRef } from "react"; // useContext 불러오기
+import { TodoContext } from "../App"; // TodoContext 불러오기
 import "./TodoEditor.css";
 
-const TodoEditor = ({ onCreate }) => {
+const TodoEditor = () => {
+  const { onCreate } = useContext(TodoContext); // useContext을 호출해 TodoContext의 값을 불러와 구조 분해 할당
+
   const [content, setContent] = useState("");
-  const inputRef = useRef(); 
-  
-  const onChangeContent = (e) => { 
+  const inputRef = useRef();
+
+  const onChangeContent = (e) => {
     setContent(e.target.value);
   };
 
@@ -15,15 +18,15 @@ const TodoEditor = ({ onCreate }) => {
       return;
     }
     onCreate(content);
-    setContent(""); 
+    setContent("");
   };
 
-  const onKeyDown = (e) => { 
+  const onKeyDown = (e) => {
     if (e.keyCode === 13) {
       onSubmit();
     }
   };
-  return(
+  return (
     <div className="TodoEditor">
       <h4>새로운 Todo 작성하기 ✏ </h4>
       <div className="editor_wrapper">
@@ -31,12 +34,12 @@ const TodoEditor = ({ onCreate }) => {
           ref={inputRef}
           value={content}
           onChange={onChangeContent}
-          onKeyDown={onKeyDown} 
+          onKeyDown={onKeyDown}
           placeholder="새로운 Todo..."
         />
         <button onClick={onSubmit}>추가</button>
       </div>
     </div>
-  )
+  );
 };
 export default TodoEditor;
