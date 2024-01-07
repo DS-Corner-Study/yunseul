@@ -1,11 +1,9 @@
+import React, { useMemo, useCallback, useReducer, useRef } from "react";
 import "./App.css";
-import React, { useCallback, useReducer, useRef } from "react";
 import Header from "./component/Header";
 import TodoEditor from "./component/TodoEditor";
 import TodoList from "./component/TodoList";
-import TestComp from "./component/TestComp";
-
-export const TodoContext = React.createContext();
+// import TestComp from "./component/TestComp";
 
 const mockTodo = [
   {
@@ -29,7 +27,7 @@ const mockTodo = [
 ];
 
 function reducer(state, action) {
-  // 상태 변화 코드
+  //상태 변화 코드
   switch (action.type) {
     case "CREATE": {
       return [action.newItem, ...state];
@@ -46,6 +44,9 @@ function reducer(state, action) {
       return state;
   }
 }
+
+export const TodoStateContext = React.createContext(); //context 생성
+export const TodoDispatchContext = React.createContext();
 
 function App() {
   const [todo, dispatch] = useReducer(reducer, mockTodo);
@@ -78,16 +79,22 @@ function App() {
     });
   }, []);
 
+  const memoizedDispatches = useMemo(() => {
+    return { onCreate, onUpdate, onDelete };
+  }, []);
+
   return (
     <div className="App">
+      {/* <TestComp /> */}
       <Header />
-      <TodoContext.Provider value={{ todo, onCreate, onUpdate, onDelete }}>
-        {" "}
-        // Props(value)를 객체로 설정
-        <TodoEditor /> // 기존의 Props 제거
-        <TodoList /> // 기존의 Props 제거
-      </TodoContext.Provider>
+      <TodoStateContext.Provider value={todo}>
+        <TodoDispatchContext.Provider value={memoizedDispatches}>
+          <TodoEditor />
+          <TodoList />
+        </TodoDispatchContext.Provider>
+      </TodoStateContext.Provider>
     </div>
   );
 }
+
 export default App;

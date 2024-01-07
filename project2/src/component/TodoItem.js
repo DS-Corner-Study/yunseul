@@ -1,11 +1,10 @@
 import "./TodoItem.css";
-import React, { useContext } from "react"; // useContext 불러오기
-import { TodoContext } from "../App"; // TodoContext 불러오기
+import React, { useContext } from "react";
+import { TodoDispatchContext } from "../App";
 
-const TodoItem = ({ id, content, isDone, createDate }) => {
-  // onDelete, onUpdate 삭제
-  const { onDelete, onUpdate } = useContext(TodoContext); // useContext을 호출해 TodoContext의 값을 불러와 구조 분해 할당
+const TodoItem = ({ id, content, isDone, createdDate }) => {
   console.log(`${id} TodoItem 업데이트`);
+  const { onUpdate, onDelete } = useContext(TodoDispatchContext);
   const onChangeCheckbox = () => {
     onUpdate(id);
   };
